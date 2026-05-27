@@ -851,27 +851,25 @@ function Library:CreateWindow(opts)
                 -- Grid pattern background for a "technical" look
                 local grid = I("ImageLabel", {Size=UDim2.new(1,0,1,0), BackgroundTransparency=1, Image="rbxassetid://6255140889", ImageTransparency=0.85, ImageColor3=Color3.new(1,1,1), ScaleType=Enum.ScaleType.Tile, TileSize=UDim2.new(0,20,0,20), Parent=bg, ZIndex=16})
                 
-                local cWrap=I("Frame",{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.new(0.5,0,0.5,0),Size=UDim2.new(0,60,0,110),BackgroundTransparency=1,Parent=bg,ZIndex=17})
+                local cWrap=I("Frame",{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.new(0.5,0,0.5,0),Size=UDim2.new(0,70,0,130),BackgroundTransparency=1,Parent=bg,ZIndex=17})
                 
-                -- Skeletons stickman (Neverlose style)
-                local dummyHead = I("Frame", {AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0,18), Size=UDim2.new(0,14,0,14), BackgroundColor3=Color3.new(0.3,0.3,0.3), Parent=cWrap, ZIndex=18}) Crn(dummyHead, 14)
-                local spine = I("Frame", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,0,0,25), Size=UDim2.new(0,2,0,32), BackgroundColor3=Color3.new(0.3,0.3,0.3), Parent=cWrap, ZIndex=18})
-                local shld = I("Frame", {AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0,27), Size=UDim2.new(0,22,0,2), BackgroundColor3=Color3.new(0.3,0.3,0.3), Parent=cWrap, ZIndex=18})
-                local lArm = I("Frame", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,-10,0,27), Size=UDim2.new(0,2,0,24), BackgroundColor3=Color3.new(0.3,0.3,0.3), Parent=cWrap, ZIndex=18})
-                local rArm = I("Frame", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,10,0,27), Size=UDim2.new(0,2,0,24), BackgroundColor3=Color3.new(0.3,0.3,0.3), Parent=cWrap, ZIndex=18})
-                local plv = I("Frame", {AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0,57), Size=UDim2.new(0,14,0,2), BackgroundColor3=Color3.new(0.3,0.3,0.3), Parent=cWrap, ZIndex=18})
-                local lLeg = I("Frame", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,-6,0,57), Size=UDim2.new(0,2,0,34), BackgroundColor3=Color3.new(0.3,0.3,0.3), Parent=cWrap, ZIndex=18})
-                local rLeg = I("Frame", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,6,0,57), Size=UDim2.new(0,2,0,34), BackgroundColor3=Color3.new(0.3,0.3,0.3), Parent=cWrap, ZIndex=18})
+                -- Dummy silhouette 
+                local dummyHead = I("Frame", {AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0,16), Size=UDim2.new(0,16,0,16), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyHead, 8)
+                local dummyTorso = I("Frame", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,0,0,26), Size=UDim2.new(0,24,0,40), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyTorso, 2)
+                local dummyLArm = I("Frame", {AnchorPoint=Vector2.new(1,0), Position=UDim2.new(0.5,-13,0,26), Size=UDim2.new(0,8,0,34), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyLArm, 2)
+                local dummyRArm = I("Frame", {AnchorPoint=Vector2.new(0,0), Position=UDim2.new(0.5,13,0,26), Size=UDim2.new(0,8,0,34), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyRArm, 2)
+                local dummyLLeg = I("Frame", {AnchorPoint=Vector2.new(1,0), Position=UDim2.new(0.5,-1,0,68), Size=UDim2.new(0,10,0,45), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyLLeg, 2)
+                local dummyRLeg = I("Frame", {AnchorPoint=Vector2.new(0,0), Position=UDim2.new(0.5,1,0,68), Size=UDim2.new(0,10,0,45), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyRLeg, 2)
                 
                 local skelCol = Color3.new(1,1,1)
-                local skelWrap = I("Frame", {Size=UDim2.new(1,0,1,0), BackgroundTransparency=1, Parent=cWrap, ZIndex=20, Visible=true})
-                local box = I("Frame", {AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0.5,0), Size=UDim2.new(1,0,1,0), BackgroundTransparency=1, Parent=cWrap, ZIndex=25})
-                local boxStk = I("UIStroke", {Thickness=1, Color=Color3.new(0.3,0.3,0.9), Parent=box})
+                local skelWrap = I("Frame", {Size=UDim2.new(1,0,1,0), BackgroundTransparency=1, Parent=cWrap, ZIndex=20, Visible=false})
+                local box = I("Frame", {Size=UDim2.new(1,0,1,0), BackgroundTransparency=1, Parent=cWrap, ZIndex=25})
+                local boxStk = I("UIStroke", {Thickness=1, Color=Color3.new(1,1,1), Parent=box}) Thm(boxStk, "Color", "Accent")
                 
-                local hpBg = I("Frame", {AnchorPoint=Vector2.new(1,0), Position=UDim2.new(0,-3,0,0), Size=UDim2.new(0,2,1,0), BackgroundColor3=Color3.new(0,0,0), BorderSizePixel=0, Parent=box, ZIndex=26})
+                local hpBg = I("Frame", {AnchorPoint=Vector2.new(1,0), Position=UDim2.new(0,-4,0,0), Size=UDim2.new(0,2,1,0), BackgroundColor3=Color3.new(0,0,0), BorderSizePixel=0, Parent=box, ZIndex=26})
                 local hpFill = I("Frame", {AnchorPoint=Vector2.new(0,1), Position=UDim2.new(0,0,1,0), Size=UDim2.new(1,0,0.8,0), BackgroundColor3=Color3.fromRGB(0,255,0), BorderSizePixel=0, Parent=hpBg, ZIndex=27})
                 
-                local nameLbl = I("TextLabel", {AnchorPoint=Vector2.new(0.5,1), Position=UDim2.new(0.5,0,0,-2), Size=UDim2.new(0,100,0,12), BackgroundTransparency=1, Text="Enemy", TextSize=11, FontFace=F_TITLE, TextColor3=Color3.new(1,1,1), Parent=box, ZIndex=26})
+                local nameLbl = I("TextLabel", {AnchorPoint=Vector2.new(0.5,1), Position=UDim2.new(0.5,0,0,-2), Size=UDim2.new(0,100,0,12), BackgroundTransparency=1, Text="Enemy", TextSize=11, FontFace=F_TEXT, TextColor3=Color3.new(1,1,1), Parent=box, ZIndex=26})
                 local distLbl = I("TextLabel", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,0,1,2), Size=UDim2.new(0,100,0,12), BackgroundTransparency=1, Text="25m", TextSize=10, FontFace=F_NUM, TextColor3=Color3.new(1,1,1), Parent=box, ZIndex=26})
                 local wpnLbl = I("TextLabel", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,0,1,14), Size=UDim2.new(0,100,0,12), BackgroundTransparency=1, Text="Weapon", TextSize=10, FontFace=F_TEXT, TextColor3=Color3.new(0.8,0.8,0.8), Parent=box, ZIndex=26})
                 
@@ -883,17 +881,17 @@ function Library:CreateWindow(opts)
                 end
                 
                 local skelLines = {}
-                local head = Vector2.new(30, 18)
-                local neck = Vector2.new(30, 25)
-                local pelvis = Vector2.new(30, 57)
-                local lShoulder = Vector2.new(20, 25)
-                local rShoulder = Vector2.new(40, 25)
-                local lHand = Vector2.new(20, 51)
-                local rHand = Vector2.new(40, 51)
-                local lKnee = Vector2.new(24, 74)
-                local rKnee = Vector2.new(36, 74)
-                local lFoot = Vector2.new(24, 91)
-                local rFoot = Vector2.new(36, 91)
+                local head = Vector2.new(35, 16)
+                local neck = Vector2.new(35, 26)
+                local pelvis = Vector2.new(35, 68)
+                local lShoulder = Vector2.new(22, 26)
+                local rShoulder = Vector2.new(48, 26)
+                local lHand = Vector2.new(18, 60)
+                local rHand = Vector2.new(52, 60)
+                local lKnee = Vector2.new(29, 90)
+                local rKnee = Vector2.new(41, 90)
+                local lFoot = Vector2.new(29, 113)
+                local rFoot = Vector2.new(41, 113)
                 
                 table.insert(skelLines, drawLine(head, neck))
                 table.insert(skelLines, drawLine(neck, pelvis))
@@ -901,13 +899,6 @@ function Library:CreateWindow(opts)
                 table.insert(skelLines, drawLine(lShoulder, lHand))
                 table.insert(skelLines, drawLine(neck, rShoulder))
                 table.insert(skelLines, drawLine(rShoulder, rHand))
-                table.insert(skelLines, drawLine(pelvis, lKnee))
-                table.insert(skelLines, drawLine(lKnee, lFoot))
-                table.insert(skelLines, drawLine(pelvis, rKnee))
-                table.insert(skelLines, drawLine(rKnee, rFoot))
-                
-                box.Position = UDim2.new(0, 16, 0, 10)
-                box.Size = UDim2.new(0, 48, 0, 90)
                 
                 local obj = {
                     Box = box, BoxOutline = boxStk, HealthBarBg = hpBg, HealthBar = hpFill, Name = nameLbl, Distance = distLbl, Weapon = wpnLbl, Skeleton = skelWrap, SkelLines = skelLines,
@@ -934,7 +925,7 @@ function Library:CreateWindow(opts)
     end
     
     local function CreateDefaults(WO)
-        local homeTab = WO:CreateTab({Name="Home", Icon="https://raw.githubusercontent.com/Unknown394852/Chess/main/HomeIcon.png"})
+        local homeTab = WO:CreateTab({Name="Home", Icon=ICONS.About})
         homeTab._btn.LayoutOrder = -999
         
         local dashSec = homeTab:CreateSection("Dashboard", "Left")
