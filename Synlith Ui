@@ -1,5 +1,3 @@
---[[ Synlith UI Library v19.0 - Definitive Edition ]]
--- Features: Redesigned Config System (Selector), Flawless Border Animations, Fixed Cursor Hitboxes, Clean Vertical Sidebar
 local Players = game:GetService("Players")
 local TS = game:GetService("TweenService")
 local UIS = game:GetService("UserInputService")
@@ -100,7 +98,7 @@ end
 local function Cn(sig, fn) local c=sig:Connect(fn) table.insert(Library._conn, c) return c end
 local function CB(cb, ...) if cb then pcall(cb, ...) end end
 local function SF(f, v) if f then Library.Flags[f]=v end end
-local function Stk(p, key, th, tr) local s=I("UIStroke", {Thickness=th or 1, Transparency=tr or 0, ApplyStrokeMode=Enum.ApplyStrokeMode.Contextual, Parent=p}) if key then if key=="Border" then s.Color=Color3.new(1,1,1) s.Transparency=0.05 local g=I("UIGradient",{Parent=s}) Thm(g,"Color","Border","BorderGradient") Cn(Run.RenderStepped,function() if g.Parent then g.Rotation=(tick()*50)%360 end end) else Thm(s, "Color", key) end end return s end
+local function Stk(p, key, th, tr) local s=I("UIStroke", {Thickness=th or 1, Transparency=tr or 0, ApplyStrokeMode=Enum.ApplyStrokeMode.Border, Parent=p}) if key then if key=="Border" then s.Color=Color3.new(1,1,1) s.Transparency=0.05 local g=I("UIGradient",{Parent=s}) Thm(g,"Color","Border","BorderGradient") Cn(Run.RenderStepped,function() if g.Parent then g.Rotation=(tick()*50)%360 end end) else Thm(s, "Color", key) end end return s end
 local function Ripple(btn) end
 
 local function MakeDrag(frame, handle) local dr, ds, sp Cn(handle.InputBegan,function(inp) if inp.UserInputType==Enum.UserInputType.MouseButton1 or inp.UserInputType==Enum.UserInputType.Touch then dr=true ds=inp.Position sp=frame.Position inp.Changed:Connect(function() if inp.UserInputState==Enum.UserInputState.End then dr=false end end) end end) Cn(UIS.InputChanged,function(inp) if dr and(inp.UserInputType==Enum.UserInputType.MouseMovement or inp.UserInputType==Enum.UserInputType.Touch) then local d=inp.Position-ds frame.Position=UDim2.new(sp.X.Scale,sp.X.Offset+d.X,sp.Y.Scale,sp.Y.Offset+d.Y) end end) end
@@ -346,7 +344,6 @@ function Library:CreateKeybindsWindow(opts)
     
     local kbWin = I("Frame", {AnchorPoint=Vector2.new(0,0.5), Position=UDim2.new(0, 16, 0.5, 0), Size=UDim2.new(0, 210, 0, 40), BackgroundTransparency=0.15, ClipsDescendants=true, Visible=false, Parent=self.ScreenGui, ZIndex=150})
     Thm(kbWin, "BackgroundColor3", "Panel") Crn(kbWin, 6) MakeDrag(kbWin, kbWin)
-    local kbScale = I("UIScale", {Parent=kbWin, Scale=0.8})
     local kbStk = I("UIStroke", {Thickness=2, Transparency=0, Color=Color3.new(1,1,1), Parent=kbWin})
     local kbGrad = I("UIGradient", {Parent=kbStk}) Thm(kbGrad, "Color", "Accent", "Gradient")
     Cn(Run.RenderStepped, function() kbGrad.Rotation = (tick() * 35) % 360 end)
@@ -415,7 +412,7 @@ end
 
 function Library:CreateWindow(opts)
     opts = opts or {} local title = opts.Title or "Synlith.hub"
-    local size = UDim2.new(0, 900, 0, 600)
+    local size = UDim2.new(0, 800, 0, 550)
     if opts.ToggleKey then self.ToggleKey=opts.ToggleKey end
     self:LoadCustomTheme()
     local persisted=false pcall(function() local pt=self:GetPersistedTheme() if pt~="" and self.Themes[pt] then self.Theme=self.Themes[pt] persisted=true end end)
@@ -426,7 +423,6 @@ function Library:CreateWindow(opts)
     
     local wm = I("Frame", {AnchorPoint=Vector2.new(1,0), Position=UDim2.new(1,-16,0,16), Size=UDim2.new(0,250,0,36), BackgroundTransparency=0.15, ClipsDescendants=true, Visible=false, Parent=gui, ZIndex=150})
     Thm(wm, "BackgroundColor3", "Panel") Crn(wm, 6) self._wm=wm MakeDrag(wm, wm)
-    local wmScale = I("UIScale", {Parent=wm, Scale=0.8})
     local wmBgI = I("ImageLabel", {Size=UDim2.new(1.04,0,4,0), AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0.1,0), BackgroundTransparency=1, ImageTransparency=0.7, ScaleType=Enum.ScaleType.Crop, Parent=wm, ZIndex=150})
     pcall(function() local bgi=FetchAsset(BURL,BPATH) if bgi~="" then wmBgI.Image=bgi end end)
     if self.UseBackgroundTint then wmBgI.ImageColor3 = self.Theme.Accent end
@@ -438,7 +434,7 @@ function Library:CreateWindow(opts)
     
     local wmLogo = I("ImageLabel", {Position=UDim2.new(0,10,0.5,-14), Size=UDim2.new(0,28,0,28), BackgroundTransparency=1, ScaleType=Enum.ScaleType.Fit, Parent=wm, ZIndex=151})
     pcall(function() local li=FetchAsset(LURL,LPATH) if li~="" then wmLogo.Image=li end end) 
-    Library._wmLogo = wmLogo
+    wmLogo.ImageColor3=Color3.new(1,1,1) local wGradL=I("UIGradient",{Parent=wmLogo}) Thm(wGradL,"Color","Logo","Gradient") Cn(Run.RenderStepped,function() if wGradL.Parent then wGradL.Offset=Vector2.new((tick()*0.5)%2-1,0) end end)
     
     local wmLbl = I("TextLabel", {Position=UDim2.new(0,44,0,0), Size=UDim2.new(1,-90,1,0), BackgroundTransparency=1, Text=title:upper().." | 0 FPS | 0 MS", TextSize=13, FontFace=F_NUM, TextXAlignment=Enum.TextXAlignment.Left, Parent=wm, ZIndex=151}) Thm(wmLbl, "TextColor3", "Text")
     
@@ -462,12 +458,10 @@ function Library:CreateWindow(opts)
     end)
     
     local bgDim = I("Frame", {Name="BgDimmer", Size=UDim2.new(1,0,1,0), BackgroundColor3=Color3.new(0,0,0), BackgroundTransparency=1, Visible=false, Parent=gui, ZIndex=0})
-    MakeParticles(bgDim, 60, 2, 7) -- Added global wind/snow particles
+    
+    local glow = I("ImageLabel", {Name="OuterGlow", AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0.5,0), Size=UDim2.new(0,size.X.Offset+80,0,size.Y.Offset+80), BackgroundTransparency=1, Image="rbxassetid://5028857084", ImageTransparency=1, ImageColor3=Color3.new(0,0,0), ScaleType=Enum.ScaleType.Slice, SliceCenter=Rect.new(24,24,276,276), Visible=false, Parent=gui, ZIndex=0})
     
     local outerMain = I("CanvasGroup", {Name="SynlithOuter", AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5, 0, 0.5, 0), Size=size, BackgroundTransparency=1, GroupTransparency=1, Parent=gui, ZIndex=1})
-    
-    local glow = I("ImageLabel", {Name="OuterGlow", AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0.5,0), Size=UDim2.new(1,40,1,40), BackgroundTransparency=1, Image="rbxassetid://5028857084", ImageTransparency=1, ImageColor3=Color3.new(0,0,0), ScaleType=Enum.ScaleType.Slice, SliceCenter=Rect.new(24,24,276,276), Visible=false, Parent=outerMain, ZIndex=0})
-    
     local padding = 4
     local main = I("Frame", {Name="Main", AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0.5,0), Size=UDim2.new(1,-padding*2,1,-padding*2), BackgroundTransparency=0, Parent=outerMain, ZIndex=1})
     Thm(main, "BackgroundColor3", "Background") Crn(main, 4) self.Window=outerMain
@@ -479,35 +473,25 @@ function Library:CreateWindow(opts)
     self._uiBgI = bgImage
     
     -- EXCLUSIVE OUTER BORDER (SOBER)
-    local outStk = I("UIStroke", {Thickness=2, Transparency=0, Color=Color3.new(1,1,1), Parent=main, ApplyStrokeMode=Enum.ApplyStrokeMode.Border})
-    local oGrad = I("UIGradient", {Parent=outStk}) Thm(oGrad, "Color", "Accent", "Gradient")
-    Cn(Run.RenderStepped, function() oGrad.Rotation = (tick() * 35) % 360 end)
+    local outStk = I("UIStroke", {Thickness=1, Transparency=0.5, Color=Color3.new(0,0,0), Parent=main, ApplyStrokeMode=Enum.ApplyStrokeMode.Border})
+    
+    -- MakeParticles(main, 40, 10, 25) -- Removed to reduce AI/neon feel
     
     MakeParticles(main, 40, 10, 25)
     
     local sWidth = 150
-    local sidebar = I("Frame", {Size=UDim2.new(0, sWidth, 1, 0), BackgroundTransparency=1, Parent=main, ZIndex=2}) Crn(sidebar, 4)
+    local sidebar = I("Frame", {Size=UDim2.new(0, sWidth, 1, 0), BackgroundTransparency=0.3, Parent=main, ZIndex=2}) Thm(sidebar, "BackgroundColor3", "Panel") Crn(sidebar, 4)
     local sLine = I("Frame", {Position=UDim2.new(1, -1, 0, 0), Size=UDim2.new(0, 1, 1, 0), BorderSizePixel=0, BackgroundTransparency=0.5, Parent=sidebar, ZIndex=3}) Thm(sLine, "BackgroundColor3", "Border")
     
     -- VERTICAL CLEAN PREMIUM LOGO HIERARCHY
     local logo = I("ImageLabel", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,0,0,24), Size=UDim2.new(0,54,0,54), BackgroundTransparency=1, ScaleType=Enum.ScaleType.Fit, Parent=sidebar, ZIndex=6})
     pcall(function() local li=FetchAsset(LURL,LPATH) if li~="" then logo.Image=li end end) 
-    Library._mainLogo = logo
-    
-    Cn(Run.RenderStepped, function()
-        local t = tick() * 1.5
-        local brightness = 0.5 + 0.5 * math.sin(t)
-        local col = Library.Theme.Accent:Lerp(Color3.new(1,1,1), brightness * 0.4)
-        if Library._mainLogo then Library._mainLogo.ImageColor3 = col end
-        if Library._wmLogo then Library._wmLogo.ImageColor3 = col end
-        if Library._dcLogo then Library._dcLogo.ImageColor3 = col end
-    end)
+    logo.ImageColor3=Color3.new(1,1,1)
 
     local cName = I("TextLabel", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,0,0,84), Size=UDim2.new(1,0,0,20), BackgroundTransparency=1, Text=title:upper(), TextSize=13, FontFace=F_TITLE, TextXAlignment=Enum.TextXAlignment.Center, Parent=sidebar, ZIndex=6}) Thm(cName, "TextColor3", "Text")
     local sep = I("Frame", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,0,0,110), Size=UDim2.new(0.8,0,0,1), BackgroundTransparency=0.5, Parent=sidebar, ZIndex=6}) Thm(sep, "BackgroundColor3", "Border")
     
     local tabScroll = I("ScrollingFrame", {Position=UDim2.new(0,0,0,120), Size=UDim2.new(1,0,1,-150), BackgroundTransparency=1, ScrollBarThickness=0, Parent=sidebar, ZIndex=6})
-    Pad(tabScroll, 0, 0, 8, 0)
     local tabLayout = Lst(tabScroll, 4) Cn(tabLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function() tabScroll.CanvasSize=UDim2.new(0,0,0,tabLayout.AbsoluteContentSize.Y+10) end)
     
     local tkLbl = I("TextLabel", {AnchorPoint=Vector2.new(0.5,1), Position=UDim2.new(0.5,0,1,-12), Size=UDim2.new(1,0,0,16), BackgroundTransparency=1, Text="Toggle UI: ["..self.ToggleKey.Name.."]", TextSize=11, FontFace=F_TEXT, TextXAlignment=Enum.TextXAlignment.Center, Parent=sidebar, ZIndex=6}) Thm(tkLbl, "TextColor3", "TextDark")
@@ -610,15 +594,16 @@ function Library:CreateWindow(opts)
             glow.Size = UDim2.new(0, newW+80, 0, newH+80)
         end
     end)
-    outerMain.Size = size ToggleUI(true)
+    
+    outerMain.Size = size glow.Size = UDim2.new(0, size.X.Offset+80, 0, size.Y.Offset+80) ToggleUI(true)
     
     local WO = {_main=main, _tabs={}}
     function WO:CreateTab(tO) tO=tO or {} local tName = tO.Name or "Tab" local tIcon = tO.Icon
         local tBtn = I("TextButton", {Name=tName, Size=UDim2.new(1,-16,0,28), BackgroundTransparency=1, Text="", Parent=tabScroll, ZIndex=10})
         local tBg = I("Frame", {Size=UDim2.new(1,0,1,0), BackgroundTransparency=1, Parent=tBtn, ZIndex=9}) Thm(tBg, "BackgroundColor3", "Element") Crn(tBg, 4)
         local iI = I("ImageLabel", {Position=UDim2.new(0,8,0.5,-7), Size=UDim2.new(0,14,0,14), BackgroundTransparency=1, ScaleType=Enum.ScaleType.Fit, Parent=tBtn, ZIndex=11})
-        if tIcon then if string.find(tIcon, "://") then iI.Image=tIcon else iI.Image="rbxassetid://"..tIcon end else iI.Visible=false end Thm(iI, "ImageColor3", "TextDark")
-        local tLbl = I("TextLabel", {Position=UDim2.new(0,0,0,0), Size=UDim2.new(1,0,1,0), BackgroundTransparency=1, Text=tName, TextSize=12, FontFace=F_TITLE, TextXAlignment=Enum.TextXAlignment.Center, Parent=tBtn, ZIndex=11}) Thm(tLbl, "TextColor3", "TextDark")
+        if tIcon then if string.sub(tIcon,1,4)=="http" then iI.Image=tIcon else iI.Image="rbxassetid://"..tIcon end else iI.Visible=false end Thm(iI, "ImageColor3", "TextDark")
+        local tLbl = I("TextLabel", {Position=UDim2.new(0, tIcon and 28 or 8, 0, 0), Size=UDim2.new(1,-30,1,0), BackgroundTransparency=1, Text=tName, TextSize=12, FontFace=F_TITLE, TextXAlignment=Enum.TextXAlignment.Left, Parent=tBtn, ZIndex=11}) Thm(tLbl, "TextColor3", "TextDark")
         local indicator = I("Frame", {Position=UDim2.new(0,0,0.5,-8), Size=UDim2.new(0,2,0,16), BackgroundTransparency=1, Parent=tBtn, ZIndex=12}) Thm(indicator, "BackgroundColor3", "Accent") Crn(indicator, 2)
         
         local tPage = I("ScrollingFrame", {Name=tName.."_Page", Position=UDim2.new(0,0,0,0), Size=UDim2.new(1,-4,1,0), BackgroundTransparency=1, ScrollBarThickness=2, CanvasSize=UDim2.new(0,0,0,0), Visible=false, Parent=pageContainer, ZIndex=10})
@@ -645,7 +630,7 @@ function Library:CreateWindow(opts)
         function TO:CreateSection(sName, side)
             side = side or "Left"
             local tgtCol = side:lower() == "right" and rCol or lCol
-            local sec = I("Frame", {Size=UDim2.new(1,0,0,0), BackgroundTransparency=1, Parent=tgtCol, ZIndex=12})
+            local sec = I("Frame", {Size=UDim2.new(1,0,0,0), BackgroundTransparency=0.7, Parent=tgtCol, ZIndex=12}) Thm(sec, "BackgroundColor3", "Section") Crn(sec, 4) Stk(sec, "Border", 1, 0.8)
             
             local sHdr if sName and sName~="" then
                 sHdr = I("Frame", {Size=UDim2.new(1,0,0,28), BackgroundTransparency=1, Parent=sec, ZIndex=13})
@@ -851,19 +836,19 @@ function Library:CreateWindow(opts)
                 -- Grid pattern background for a "technical" look
                 local grid = I("ImageLabel", {Size=UDim2.new(1,0,1,0), BackgroundTransparency=1, Image="rbxassetid://6255140889", ImageTransparency=0.85, ImageColor3=Color3.new(1,1,1), ScaleType=Enum.ScaleType.Tile, TileSize=UDim2.new(0,20,0,20), Parent=bg, ZIndex=16})
                 
-                local cWrap=I("Frame",{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.new(0.5,0,0.5,0),Size=UDim2.new(0,70,0,130),BackgroundTransparency=1,Parent=bg,ZIndex=17})
+                local cWrap=I("Frame",{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.new(0.5,0,0.5,0),Size=UDim2.new(0,80,0,110),BackgroundTransparency=1,Parent=bg,ZIndex=17})
                 
                 -- Dummy silhouette 
-                local dummyHead = I("Frame", {AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0,16), Size=UDim2.new(0,16,0,16), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyHead, 8)
-                local dummyTorso = I("Frame", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,0,0,26), Size=UDim2.new(0,24,0,40), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyTorso, 2)
-                local dummyLArm = I("Frame", {AnchorPoint=Vector2.new(1,0), Position=UDim2.new(0.5,-13,0,26), Size=UDim2.new(0,8,0,34), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyLArm, 2)
-                local dummyRArm = I("Frame", {AnchorPoint=Vector2.new(0,0), Position=UDim2.new(0.5,13,0,26), Size=UDim2.new(0,8,0,34), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyRArm, 2)
-                local dummyLLeg = I("Frame", {AnchorPoint=Vector2.new(1,0), Position=UDim2.new(0.5,-1,0,68), Size=UDim2.new(0,10,0,45), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyLLeg, 2)
-                local dummyRLeg = I("Frame", {AnchorPoint=Vector2.new(0,0), Position=UDim2.new(0.5,1,0,68), Size=UDim2.new(0,10,0,45), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyRLeg, 2)
+                local dummyHead = I("Frame", {AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0,20), Size=UDim2.new(0,12,0,12), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyHead, 6)
+                local dummyTorso = I("Frame", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,0,0,28), Size=UDim2.new(0,18,0,30), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyTorso, 2)
+                local dummyLArm = I("Frame", {AnchorPoint=Vector2.new(1,0), Position=UDim2.new(0.5,-10,0,28), Size=UDim2.new(0,6,0,26), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyLArm, 2)
+                local dummyRArm = I("Frame", {AnchorPoint=Vector2.new(0,0), Position=UDim2.new(0.5,10,0,28), Size=UDim2.new(0,6,0,26), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyRArm, 2)
+                local dummyLLeg = I("Frame", {AnchorPoint=Vector2.new(1,0), Position=UDim2.new(0.5,-1,0,60), Size=UDim2.new(0,7,0,35), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyLLeg, 2)
+                local dummyRLeg = I("Frame", {AnchorPoint=Vector2.new(0,0), Position=UDim2.new(0.5,1,0,60), Size=UDim2.new(0,7,0,35), BackgroundColor3=Color3.new(0.2,0.2,0.2), Parent=cWrap, ZIndex=18}) Crn(dummyRLeg, 2)
                 
                 local skelCol = Color3.new(1,1,1)
                 local skelWrap = I("Frame", {Size=UDim2.new(1,0,1,0), BackgroundTransparency=1, Parent=cWrap, ZIndex=20, Visible=false})
-                local box = I("Frame", {Size=UDim2.new(1,0,1,0), BackgroundTransparency=1, Parent=cWrap, ZIndex=25})
+                local box = I("Frame", {BackgroundTransparency=1, Parent=cWrap, ZIndex=25})
                 local boxStk = I("UIStroke", {Thickness=1, Color=Color3.new(1,1,1), Parent=box}) Thm(boxStk, "Color", "Accent")
                 
                 local hpBg = I("Frame", {AnchorPoint=Vector2.new(1,0), Position=UDim2.new(0,-4,0,0), Size=UDim2.new(0,2,1,0), BackgroundColor3=Color3.new(0,0,0), BorderSizePixel=0, Parent=box, ZIndex=26})
@@ -881,17 +866,17 @@ function Library:CreateWindow(opts)
                 end
                 
                 local skelLines = {}
-                local head = Vector2.new(35, 16)
-                local neck = Vector2.new(35, 26)
-                local pelvis = Vector2.new(35, 68)
-                local lShoulder = Vector2.new(22, 26)
-                local rShoulder = Vector2.new(48, 26)
-                local lHand = Vector2.new(18, 60)
-                local rHand = Vector2.new(52, 60)
-                local lKnee = Vector2.new(29, 90)
-                local rKnee = Vector2.new(41, 90)
-                local lFoot = Vector2.new(29, 113)
-                local rFoot = Vector2.new(41, 113)
+                local head = Vector2.new(40, 20)
+                local neck = Vector2.new(40, 28)
+                local pelvis = Vector2.new(40, 58)
+                local lShoulder = Vector2.new(28, 28)
+                local rShoulder = Vector2.new(52, 28)
+                local lHand = Vector2.new(24, 52)
+                local rHand = Vector2.new(56, 52)
+                local lKnee = Vector2.new(34, 76)
+                local rKnee = Vector2.new(46, 76)
+                local lFoot = Vector2.new(33, 93)
+                local rFoot = Vector2.new(47, 93)
                 
                 table.insert(skelLines, drawLine(head, neck))
                 table.insert(skelLines, drawLine(neck, pelvis))
@@ -899,6 +884,13 @@ function Library:CreateWindow(opts)
                 table.insert(skelLines, drawLine(lShoulder, lHand))
                 table.insert(skelLines, drawLine(neck, rShoulder))
                 table.insert(skelLines, drawLine(rShoulder, rHand))
+                table.insert(skelLines, drawLine(pelvis, lKnee))
+                table.insert(skelLines, drawLine(lKnee, lFoot))
+                table.insert(skelLines, drawLine(pelvis, rKnee))
+                table.insert(skelLines, drawLine(rKnee, rFoot))
+                
+                box.Position = UDim2.new(0, 16, 0, 10)
+                box.Size = UDim2.new(0, 48, 0, 90)
                 
                 local obj = {
                     Box = box, BoxOutline = boxStk, HealthBarBg = hpBg, HealthBar = hpFill, Name = nameLbl, Distance = distLbl, Weapon = wpnLbl, Skeleton = skelWrap, SkelLines = skelLines,
@@ -925,7 +917,7 @@ function Library:CreateWindow(opts)
     end
     
     local function CreateDefaults(WO)
-        local homeTab = WO:CreateTab({Name="Home", Icon=ICONS.About})
+        local homeTab = WO:CreateTab({Name="Home", Icon="https://raw.githubusercontent.com/Unknown394852/Chess/main/HomeIcon.png"})
         homeTab._btn.LayoutOrder = -999
         
         local dashSec = homeTab:CreateSection("Dashboard", "Left")
@@ -957,7 +949,7 @@ function Library:CreateWindow(opts)
         local com = I("Frame", {Position=UDim2.new(0,4,0,144), Size=UDim2.new(1,-8,0,32), BackgroundTransparency=1, Parent=dash, ZIndex=16})
         local dI = I("ImageLabel", {Position=UDim2.new(0,4,0.5,-10), Size=UDim2.new(0,20,0,20), BackgroundTransparency=1, ScaleType=Enum.ScaleType.Fit, Parent=com, ZIndex=16}) 
         pcall(function() local li=FetchAsset(DURL,DPATH) if li~="" then dI.Image=li end end) 
-        Library._dcLogo = dI
+        dI.ImageColor3=Color3.new(1,1,1) local dGradL=I("UIGradient",{Parent=dI}) Thm(dGradL,"Color","Logo","Gradient") Cn(Run.RenderStepped,function() if dGradL.Parent then dGradL.Offset=Vector2.new((tick()*0.5)%2-1,0) end end)
         
         local cpB = I("TextButton", {Position=UDim2.new(0,32,0.5,-12), Size=UDim2.new(0,140,0,24), Text="COPY DISCORD INVITE", TextSize=10, FontFace=F_TITLE, Parent=com, ZIndex=17}) Thm(cpB, "BackgroundColor3", "Element") Thm(cpB, "TextColor3", "Text") Crn(cpB, 4) Stk(cpB, "Border", 1, 0.2)
         Cn(cpB.MouseButton1Click, function() pcall(function() setclipboard(DINV) end) cpB.Text="COPIED" task.delay(1.5, function() cpB.Text="COPY DISCORD INVITE" end) Library:Notify("Discord", "Copied to clipboard") end)
