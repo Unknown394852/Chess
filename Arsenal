@@ -54,7 +54,7 @@ local State = {
     AimbotWallCheck = true,
     AimbotSmoothness = 0,
     AimbotRandomOffset = 0,
-    AimbotKey = Enum.KeyCode.MouseButton2,
+    AimbotKey = Enum.UserInputType.MouseButton2,
     AimbotMode = "Hold",
     AimbotActive = false,
 
@@ -270,10 +270,30 @@ local function keyCodeFromString(str)
     if type(str) == "string" then
         if str == "MouseButton1" then return Enum.UserInputType.MouseButton1 end
         if str == "MouseButton2" then return Enum.UserInputType.MouseButton2 end
+        if str == "MouseButton3" then return Enum.UserInputType.MouseButton3 end
         local ok, key = pcall(function() return Enum.KeyCode[str] end)
-        if ok then return key end
+        if ok and key then return key end
     end
     return Enum.KeyCode.E
+end
+
+local function formatBindName(bind)
+    if typeof(bind) == "EnumItem" then
+        return bind.Name
+    end
+    return tostring(bind)
+end
+
+local function inputMatchesBind(input, bind)
+    if typeof(bind) == "EnumItem" then
+        if bind.EnumType == Enum.KeyCode then
+            return input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == bind
+        end
+        if bind.EnumType == Enum.UserInputType then
+            return input.UserInputType == bind
+        end
+    end
+    return false
 end
 
 local function isKeyActive(key, mode, activeFlag)
@@ -281,11 +301,8 @@ local function isKeyActive(key, mode, activeFlag)
     if typeof(key) == "EnumItem" and key.EnumType == Enum.KeyCode then
         return UserInputService:IsKeyDown(key)
     end
-    if key == Enum.UserInputType.MouseButton1 then
-        return UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
-    end
-    if key == Enum.UserInputType.MouseButton2 then
-        return UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
+    if typeof(key) == "EnumItem" and key.EnumType == Enum.UserInputType then
+        return UserInputService:IsMouseButtonPressed(key)
     end
     return false
 end
@@ -1067,9 +1084,9 @@ local function createKeybindsMenu()
     connect(RunService.Heartbeat, function()
         frame.Visible = State.KeybindsVisible
         list.Text = table.concat({
-            "Menu: " .. tostring(State.MenuKey.Name),
-            "Aimbot: " .. tostring(State.AimbotKey.Name),
-            "Trigger: " .. tostring(State.TriggerKey.Name),
+            "Menu: " .. formatBindName(State.MenuKey),
+            "Aimbot: " .. formatBindName(State.AimbotKey),
+            "Trigger: " .. formatBindName(State.TriggerKey),
             "Fly: WASD + Space/Ctrl",
         }, "\n")
     end)
@@ -1795,10 +1812,10 @@ SettingsTab:Button({
 -- // Main loops & events
 connect(UserInputService.InputBegan, function(input, processed)
     if processed then return end
-    if State.AimbotMode == "Toggle" and input.KeyCode == State.AimbotKey then
+    if State.AimbotMode == "Toggle" and inputMatchesBind(input, State.AimbotKey) then
         State.AimbotActive = not State.AimbotActive
     end
-    if State.TriggerMode == "Toggle" and input.KeyCode == State.TriggerKey then
+    if State.TriggerMode == "Toggle" and inputMatchesBind(input, State.TriggerKey) then
         State.TriggerActive = not State.TriggerActive
     end
     if State.InfiniteJump and input.KeyCode == Enum.KeyCode.Space then
