@@ -1,6 +1,6 @@
 --[[
 	Synlith Hub — Arsenal
-	Premium exploit script
+	Premium script
 	All features wired to modified Maclib UI
 ]]
 
@@ -87,8 +87,6 @@ end
 --// ============================================
 --// CREATE WINDOW
 --// ============================================
-MacLib:SetFolder("SynlithHub/Arsenal")
-
 local Window = MacLib:Window({
 	Title = "Synlith Hub",
 	Subtitle = "Arsenal",
@@ -98,6 +96,8 @@ local Window = MacLib:Window({
 	Keybind = Enum.KeyCode.RightControl,
 	AcrylicBlur = true,
 })
+
+MacLib:SetFolder("SynlithHub/Arsenal")
 
 -- Watermark
 local Watermark = Window:Watermark({
