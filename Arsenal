@@ -5,7 +5,7 @@
 ]]
 
 --// Load Modified Maclib
-local MacLib = loadstring(readfile("maclib.lua"))() -- Change path to GitHub raw URL for production
+local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Unknown394852/Chess/refs/heads/main/Maclibcustom"))()
 
 --// Services
 local Players = game:GetService("Players")
