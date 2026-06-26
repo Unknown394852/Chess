@@ -1,10 +1,32 @@
 local MacLib = { 
 	Options = {}, 
 	Folder = "Maclib", 
+	Themes = {
+		Default = { Base = Color3.fromRGB(15, 15, 15), Accent = Color3.fromRGB(255, 255, 255), Outline = Color3.fromRGB(255, 255, 255) },
+		Midnight = { Base = Color3.fromRGB(10, 14, 26), Accent = Color3.fromRGB(59, 130, 246), Outline = Color3.fromRGB(59, 130, 246) },
+		NeonPurple = { Base = Color3.fromRGB(13, 4, 21), Accent = Color3.fromRGB(168, 85, 247), Outline = Color3.fromRGB(168, 85, 247) },
+		Aqua = { Base = Color3.fromRGB(4, 18, 16), Accent = Color3.fromRGB(6, 182, 212), Outline = Color3.fromRGB(6, 182, 212) },
+		Crimson = { Base = Color3.fromRGB(21, 4, 4), Accent = Color3.fromRGB(239, 68, 68), Outline = Color3.fromRGB(239, 68, 68) },
+		TokyoNight = { Base = Color3.fromRGB(26, 27, 38), Accent = Color3.fromRGB(255, 158, 100), Outline = Color3.fromRGB(255, 158, 100) },
+	},
 	GetService = function(service)
 		return cloneref and cloneref(game:GetService(service)) or game:GetService(service)
 	end
 }
+
+function MacLib:SetTheme(themeName)
+	local theme = self.Themes[themeName] or self.Themes.Default
+	local gui = game:GetService("CoreGui"):FindFirstChild("Maclib")
+	if not gui then return end
+	
+	for _, desc in pairs(gui:GetDescendants()) do
+		if desc:IsA("Frame") and desc.Name == "Base" then
+			desc.BackgroundColor3 = theme.Base
+		elseif desc:IsA("UIStroke") and desc.Name == "BaseUIStroke" then
+			desc.Color = theme.Outline
+		end
+	end
+end
 
 --// Services
 local TweenService = MacLib.GetService("TweenService")
@@ -43,101 +65,7 @@ local assets = {
 	dropdown = "rbxassetid://18865373378",
 	sliderbar = "rbxassetid://18772615246",
 	sliderhead = "rbxassetid://18772834246",
-	-- Synlith Hub Assets
-	synlithLogo = "rbxassetid://85653576147502",
-	discordLogo = "rbxassetid://102703026784486",
 }
-
---// Theme System
-MacLib.Themes = {
-	["Midnight"] = {
-		Base = Color3.fromRGB(15, 15, 15),
-		SectionBg = Color3.fromRGB(255, 255, 255),
-		SectionBgTransparency = 0.98,
-		Text = Color3.fromRGB(255, 255, 255),
-		TextDimTransparency = 0.5,
-		TextDimmerTransparency = 0.7,
-		Accent = Color3.fromRGB(130, 130, 255),
-		Stroke = Color3.fromRGB(255, 255, 255),
-		StrokeTransparency = 0.9,
-		ToggleOn = Color3.fromRGB(255, 255, 255),
-		ToggleOff = Color3.fromRGB(87, 86, 86),
-		DividerTransparency = 0.9,
-	},
-	["Neon Purple"] = {
-		Base = Color3.fromRGB(12, 10, 18),
-		SectionBg = Color3.fromRGB(200, 160, 255),
-		SectionBgTransparency = 0.97,
-		Text = Color3.fromRGB(240, 230, 255),
-		TextDimTransparency = 0.45,
-		TextDimmerTransparency = 0.65,
-		Accent = Color3.fromRGB(160, 80, 255),
-		Stroke = Color3.fromRGB(160, 80, 255),
-		StrokeTransparency = 0.85,
-		ToggleOn = Color3.fromRGB(160, 80, 255),
-		ToggleOff = Color3.fromRGB(60, 40, 80),
-		DividerTransparency = 0.88,
-	},
-	["Aqua"] = {
-		Base = Color3.fromRGB(10, 15, 18),
-		SectionBg = Color3.fromRGB(140, 255, 255),
-		SectionBgTransparency = 0.97,
-		Text = Color3.fromRGB(220, 250, 255),
-		TextDimTransparency = 0.45,
-		TextDimmerTransparency = 0.65,
-		Accent = Color3.fromRGB(0, 210, 210),
-		Stroke = Color3.fromRGB(0, 210, 210),
-		StrokeTransparency = 0.85,
-		ToggleOn = Color3.fromRGB(0, 210, 210),
-		ToggleOff = Color3.fromRGB(30, 60, 65),
-		DividerTransparency = 0.88,
-	},
-	["Crimson"] = {
-		Base = Color3.fromRGB(18, 10, 10),
-		SectionBg = Color3.fromRGB(255, 160, 160),
-		SectionBgTransparency = 0.97,
-		Text = Color3.fromRGB(255, 230, 230),
-		TextDimTransparency = 0.45,
-		TextDimmerTransparency = 0.65,
-		Accent = Color3.fromRGB(255, 60, 60),
-		Stroke = Color3.fromRGB(255, 60, 60),
-		StrokeTransparency = 0.85,
-		ToggleOn = Color3.fromRGB(255, 60, 60),
-		ToggleOff = Color3.fromRGB(80, 35, 35),
-		DividerTransparency = 0.88,
-	},
-	["Tokyo Night"] = {
-		Base = Color3.fromRGB(13, 15, 22),
-		SectionBg = Color3.fromRGB(180, 200, 255),
-		SectionBgTransparency = 0.97,
-		Text = Color3.fromRGB(230, 235, 255),
-		TextDimTransparency = 0.45,
-		TextDimmerTransparency = 0.65,
-		Accent = Color3.fromRGB(125, 170, 255),
-		Stroke = Color3.fromRGB(125, 170, 255),
-		StrokeTransparency = 0.85,
-		ToggleOn = Color3.fromRGB(125, 170, 255),
-		ToggleOff = Color3.fromRGB(40, 50, 75),
-		DividerTransparency = 0.88,
-	},
-}
-
-MacLib.CurrentTheme = "Midnight"
-
-local themeBindings = {}
-
-local function getTheme()
-	return MacLib.Themes[MacLib.CurrentTheme]
-end
-
-local function registerThemeBinding(instance, property, themeKey, extraTransparencyKey)
-	table.insert(themeBindings, {
-		instance = instance,
-		property = property,
-		themeKey = themeKey,
-		extraTransparencyKey = extraTransparencyKey,
-	})
-end
 
 --// Functions
 local function GetGui()
@@ -211,6 +139,35 @@ function MacLib:Window(Settings)
 	baseUIScale.Name = "BaseUIScale"
 	baseUIScale.Parent = base
 
+	--// Resize Handle
+	local resizeHandle = Instance.new("Frame")
+	resizeHandle.Name = "ResizeHandle"
+	resizeHandle.Size = UDim2.fromOffset(20, 20)
+	resizeHandle.Position = UDim2.new(1, 0, 1, 0)
+	resizeHandle.AnchorPoint = Vector2.new(1, 1)
+	resizeHandle.BackgroundTransparency = 1
+	resizeHandle.Parent = base
+	
+	local resizing = false
+	local startSize, startMouse
+	resizeHandle.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			resizing = true
+			startSize = base.AbsoluteSize
+			startMouse = UserInputService:GetMouseLocation()
+		end
+	end)
+	UserInputService.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then resizing = false end
+	end)
+	UserInputService.InputChanged:Connect(function(input)
+		if resizing and input.UserInputType == Enum.UserInputType.MouseMovement then
+			local delta = UserInputService:GetMouseLocation() - startMouse
+			base.Size = UDim2.fromOffset(math.max(400, startSize.X + delta.X), math.max(300, startSize.Y + delta.Y))
+		end
+	end)
+
+
 	local baseUICorner = Instance.new("UICorner")
 	baseUICorner.Name = "BaseUICorner"
 	baseUICorner.CornerRadius = UDim.new(0, 10)
@@ -220,7 +177,8 @@ function MacLib:Window(Settings)
 	baseUIStroke.Name = "BaseUIStroke"
 	baseUIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	baseUIStroke.Color = Color3.fromRGB(255, 255, 255)
-	baseUIStroke.Transparency = 0.9
+	baseUIStroke.Transparency = 0.2
+	baseUIStroke.Thickness = 2
 	baseUIStroke.Parent = base
 
 	local sidebar = Instance.new("Frame")
@@ -260,40 +218,24 @@ function MacLib:Window(Settings)
 
 	local windowControls = Instance.new("Frame")
 	windowControls.Name = "WindowControls"
-	windowControls.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	windowControls.BackgroundTransparency = 1
-	windowControls.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	windowControls.BorderSizePixel = 0
-	windowControls.Size = UDim2.new(1, 0, 0, 10)
-
-	local divider1 = Instance.new("Frame")
-	divider1.Name = "Divider"
-	divider1.AnchorPoint = Vector2.new(0, 1)
-	divider1.BackgroundColor3 = getTheme().Stroke
-	divider1.BackgroundTransparency = getTheme().DividerTransparency
-	divider1.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	divider1.BorderSizePixel = 0
-	divider1.Position = UDim2.fromScale(0, 1)
-	divider1.Size = UDim2.new(1, 0, 0, 1)
-	divider1.Parent = windowControls
-
+	windowControls.Size = UDim2.new(1, 0, 0, 0)
+	windowControls.Visible = false
 	windowControls.Parent = sidebar
 
-	-- Synlith Hub Branded Information Section
 	local information = Instance.new("Frame")
 	information.Name = "Information"
 	information.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	information.BackgroundTransparency = 1
 	information.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	information.BorderSizePixel = 0
-	information.Position = UDim2.fromOffset(0, 10)
-	information.Size = UDim2.new(1, 0, 0, 90)
+	information.Position = UDim2.fromOffset(0, 0)
+	information.Size = UDim2.new(1, 0, 0, 60)
 
 	local divider2 = Instance.new("Frame")
 	divider2.Name = "Divider"
 	divider2.AnchorPoint = Vector2.new(0, 1)
-	divider2.BackgroundColor3 = getTheme().Stroke
-	divider2.BackgroundTransparency = getTheme().DividerTransparency
+	divider2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	divider2.BackgroundTransparency = 0.9
 	divider2.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	divider2.BorderSizePixel = 0
 	divider2.Position = UDim2.fromScale(0, 1)
@@ -310,23 +252,23 @@ function MacLib:Window(Settings)
 
 	local informationHolderUIPadding = Instance.new("UIPadding")
 	informationHolderUIPadding.Name = "InformationHolderUIPadding"
-	informationHolderUIPadding.PaddingBottom = UDim.new(0, 8)
-	informationHolderUIPadding.PaddingLeft = UDim.new(0, 18)
-	informationHolderUIPadding.PaddingRight = UDim.new(0, 18)
-	informationHolderUIPadding.PaddingTop = UDim.new(0, 8)
+	informationHolderUIPadding.PaddingBottom = UDim.new(0, 10)
+	informationHolderUIPadding.PaddingLeft = UDim.new(0, 23)
+	informationHolderUIPadding.PaddingRight = UDim.new(0, 22)
+	informationHolderUIPadding.PaddingTop = UDim.new(0, 10)
 	informationHolderUIPadding.Parent = informationHolder
 
 	local globalSettingsButton = Instance.new("ImageButton")
 	globalSettingsButton.Name = "GlobalSettingsButton"
 	globalSettingsButton.Image = assets.globe
 	globalSettingsButton.ImageTransparency = 0.5
-	globalSettingsButton.AnchorPoint = Vector2.new(1, 0)
+	globalSettingsButton.AnchorPoint = Vector2.new(1, 0.5)
 	globalSettingsButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	globalSettingsButton.BackgroundTransparency = 1
 	globalSettingsButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	globalSettingsButton.BorderSizePixel = 0
-	globalSettingsButton.Position = UDim2.fromScale(1, 0)
-	globalSettingsButton.Size = UDim2.fromOffset(14, 14)
+	globalSettingsButton.Position = UDim2.fromScale(1, 0.5)
+	globalSettingsButton.Size = UDim2.fromOffset(16,16)
 	globalSettingsButton.Parent = informationHolder
 
 	local function ChangeGlobalSettingsButtonState(State)
@@ -348,53 +290,66 @@ function MacLib:Window(Settings)
 		ChangeGlobalSettingsButtonState("Default")
 	end)
 
-	-- Logo + Title row
-	local logoTitleRow = Instance.new("Frame")
-	logoTitleRow.Name = "LogoTitleRow"
-	logoTitleRow.BackgroundTransparency = 1
-	logoTitleRow.BorderSizePixel = 0
-	logoTitleRow.Size = UDim2.new(1, 0, 0, 42)
+	local titleFrame = Instance.new("Frame")
+	titleFrame.Name = "TitleFrame"
+	titleFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	titleFrame.BackgroundTransparency = 1
+	titleFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	titleFrame.BorderSizePixel = 0
+	titleFrame.Size = UDim2.fromScale(1, 1)
 
-	local logoTitleRowLayout = Instance.new("UIListLayout")
-	logoTitleRowLayout.FillDirection = Enum.FillDirection.Horizontal
-	logoTitleRowLayout.Padding = UDim.new(0, 10)
-	logoTitleRowLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	logoTitleRowLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-	logoTitleRowLayout.Parent = logoTitleRow
+	local titleFrameUIListLayout = Instance.new("UIListLayout")
+	titleFrameUIListLayout.Name = "TitleFrameUIListLayout"
+	titleFrameUIListLayout.Padding = UDim.new(0, 10)
+	titleFrameUIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	titleFrameUIListLayout.FillDirection = Enum.FillDirection.Horizontal
+	titleFrameUIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+	titleFrameUIListLayout.Parent = titleFrame
 
-	local hubLogo = Instance.new("ImageLabel")
-	hubLogo.Name = "HubLogo"
-	hubLogo.Image = assets.synlithLogo
-	hubLogo.BackgroundTransparency = 1
-	hubLogo.BorderSizePixel = 0
-	hubLogo.Size = UDim2.fromOffset(38, 38)
-	hubLogo.ScaleType = Enum.ScaleType.Fit
-	hubLogo.Parent = logoTitleRow
+	local titleIcon = Instance.new("ImageLabel")
+	titleIcon.Name = "TitleIcon"
+	titleIcon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	titleIcon.BackgroundTransparency = 1
+	titleIcon.Size = UDim2.fromOffset(48, 48)
+	titleIcon.Image = Settings.Icon or "rbxassetid://18821914323" -- default icon
+	titleIcon.Visible = true
+	titleIcon.Parent = titleFrame
+
+	local textContainer = Instance.new("Frame")
+	textContainer.Name = "TextContainer"
+	textContainer.BackgroundTransparency = 1
+	textContainer.Size = UDim2.new(1, -58, 1, 0)
+	textContainer.Parent = titleFrame
+
+	local textLayout = Instance.new("UIListLayout")
+	textLayout.Padding = UDim.new(0, 3)
+	textLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	textLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+	textLayout.Parent = textContainer
 
 	local title = Instance.new("TextLabel")
 	title.Name = "Title"
 	title.FontFace = Font.new(
 		assets.interFont,
-		Enum.FontWeight.Bold,
+		Enum.FontWeight.SemiBold,
 		Enum.FontStyle.Normal
 	)
-	title.Text = Settings.Title or "Synlith Hub"
-	title.TextColor3 = getTheme().Text
+	title.Text = Settings.Title
+	title.TextColor3 = Color3.fromRGB(255, 255, 255)
 	title.RichText = true
-	title.TextSize = 20
-	title.TextTransparency = 0.05
+	title.TextSize = 22
+	title.TextTransparency = 0.1
 	title.TextTruncate = Enum.TextTruncate.SplitWord
 	title.TextXAlignment = Enum.TextXAlignment.Left
-	title.AutomaticSize = Enum.AutomaticSize.XY
+	title.TextYAlignment = Enum.TextYAlignment.Top
+	title.AutomaticSize = Enum.AutomaticSize.Y
+	title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	title.BackgroundTransparency = 1
+	title.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	title.BorderSizePixel = 0
-	title.LayoutOrder = 1
-	title.Parent = logoTitleRow
-	registerThemeBinding(title, "TextColor3", "Text")
+	title.Size = UDim2.new(1, 0, 0, 0)
+	title.Parent = textContainer
 
-	logoTitleRow.Parent = informationHolder
-
-	-- Game name label below
 	local subtitle = Instance.new("TextLabel")
 	subtitle.Name = "Subtitle"
 	subtitle.FontFace = Font.new(
@@ -402,21 +357,25 @@ function MacLib:Window(Settings)
 		Enum.FontWeight.Medium,
 		Enum.FontStyle.Normal
 	)
-	subtitle.Text = Settings.Subtitle or "Arsenal"
 	subtitle.RichText = true
-	subtitle.TextColor3 = getTheme().Text
-	subtitle.TextSize = 13
-	subtitle.TextTransparency = getTheme().TextDimmerTransparency
+	subtitle.Text = Settings.Subtitle
+	subtitle.RichText = true
+	subtitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+	subtitle.TextSize = 14
+	subtitle.TextTransparency = 0.7
 	subtitle.TextTruncate = Enum.TextTruncate.SplitWord
 	subtitle.TextXAlignment = Enum.TextXAlignment.Left
-	subtitle.AutomaticSize = Enum.AutomaticSize.XY
+	subtitle.TextYAlignment = Enum.TextYAlignment.Top
+	subtitle.AutomaticSize = Enum.AutomaticSize.Y
+	subtitle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	subtitle.BackgroundTransparency = 1
+	subtitle.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	subtitle.BorderSizePixel = 0
-	subtitle.Position = UDim2.fromOffset(0, 50)
-	subtitle.Parent = informationHolder
-	registerThemeBinding(subtitle, "TextColor3", "Text")
+	subtitle.LayoutOrder = 1
+	subtitle.Size = UDim2.new(1, 0, 0, 0)
+	subtitle.Parent = textContainer
 
-	local titleFrame = informationHolder -- alias for compatibility
+	titleFrame.Parent = informationHolder
 
 	informationHolder.Parent = information
 
@@ -428,8 +387,8 @@ function MacLib:Window(Settings)
 	sidebarGroup.BackgroundTransparency = 1
 	sidebarGroup.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	sidebarGroup.BorderSizePixel = 0
-	sidebarGroup.Position = UDim2.fromOffset(0, 100)
-	sidebarGroup.Size = UDim2.new(1, 0, 1, -100)
+	sidebarGroup.Position = UDim2.fromOffset(0, 91)
+	sidebarGroup.Size = UDim2.new(1, 0, 1, -91)
 
 	local userInfo = Instance.new("Frame")
 	userInfo.Name = "UserInfo"
@@ -555,41 +514,6 @@ function MacLib:Window(Settings)
 	username.LayoutOrder = 1
 	username.Parent = userAndDisplayFrame
 	username.Size = UDim2.fromScale(1,0)
-
-	-- Session Timer
-	local sessionTime = Instance.new("TextLabel")
-	sessionTime.Name = "SessionTime"
-	sessionTime.FontFace = Font.new(
-		assets.interFont,
-		Enum.FontWeight.Medium,
-		Enum.FontStyle.Normal
-	)
-	sessionTime.Text = "Session: 00:00:00"
-	sessionTime.TextColor3 = getTheme().Accent
-	sessionTime.TextSize = 11
-	sessionTime.TextTransparency = 0.4
-	sessionTime.TextXAlignment = Enum.TextXAlignment.Left
-	sessionTime.AutomaticSize = Enum.AutomaticSize.XY
-	sessionTime.BackgroundTransparency = 1
-	sessionTime.BorderSizePixel = 0
-	sessionTime.LayoutOrder = 2
-	sessionTime.Size = UDim2.fromScale(1, 0)
-	sessionTime.Parent = userAndDisplayFrame
-	registerThemeBinding(sessionTime, "TextColor3", "Accent")
-
-	local sessionStartTick = tick()
-	local sessionTimerConnection
-	sessionTimerConnection = RunService.Heartbeat:Connect(function()
-		if unloaded then
-			if sessionTimerConnection then sessionTimerConnection:Disconnect() end
-			return
-		end
-		local elapsed = math.floor(tick() - sessionStartTick)
-		local h = math.floor(elapsed / 3600)
-		local m = math.floor((elapsed % 3600) / 60)
-		local s = elapsed % 60
-		sessionTime.Text = string.format("Session: %02d:%02d:%02d", h, m, s)
-	end)
 
 	userAndDisplayFrame.Parent = informationGroup
 
@@ -727,8 +651,8 @@ function MacLib:Window(Settings)
 	local divider4 = Instance.new("Frame")
 	divider4.Name = "Divider"
 	divider4.AnchorPoint = Vector2.new(0, 1)
-	divider4.BackgroundColor3 = getTheme().Stroke
-	divider4.BackgroundTransparency = getTheme().DividerTransparency
+	divider4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	divider4.BackgroundTransparency = 0.9
 	divider4.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	divider4.BorderSizePixel = 0
 	divider4.Position = UDim2.fromScale(0, 1)
@@ -749,77 +673,16 @@ function MacLib:Window(Settings)
 	uIPadding2.PaddingRight = UDim.new(0, 20)
 	uIPadding2.Parent = elements
 
-	-- Window Controls (top-right: minimize, expand, close)
-	local topbarControls = Instance.new("Frame")
-	topbarControls.Name = "TopbarControls"
-	topbarControls.AnchorPoint = Vector2.new(1, 0.5)
-	topbarControls.BackgroundTransparency = 1
-	topbarControls.BorderSizePixel = 0
-	topbarControls.Position = UDim2.fromScale(1, 0.5)
-	topbarControls.Size = UDim2.fromOffset(90, 30)
-	topbarControls.Parent = elements
-
-	local topbarControlsLayout = Instance.new("UIListLayout")
-	topbarControlsLayout.FillDirection = Enum.FillDirection.Horizontal
-	topbarControlsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
-	topbarControlsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-	topbarControlsLayout.Padding = UDim.new(0, 2)
-	topbarControlsLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	topbarControlsLayout.Parent = topbarControls
-
-	local function createWindowControlBtn(name, text, layoutOrder, hoverColor)
-		local btn = Instance.new("TextButton")
-		btn.Name = name
-		btn.FontFace = Font.new(assets.interFont, Enum.FontWeight.Regular, Enum.FontStyle.Normal)
-		btn.Text = text
-		btn.TextColor3 = getTheme().Text
-		btn.TextSize = 16
-		btn.TextTransparency = 0.5
-		btn.AutoButtonColor = false
-		btn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		btn.BackgroundTransparency = 1
-		btn.BorderSizePixel = 0
-		btn.Size = UDim2.fromOffset(28, 28)
-		btn.LayoutOrder = layoutOrder
-		btn.Parent = topbarControls
-
-		local btnCorner = Instance.new("UICorner")
-		btnCorner.CornerRadius = UDim.new(0, 6)
-		btnCorner.Parent = btn
-
-		btn.MouseEnter:Connect(function()
-			Tween(btn, TweenInfo.new(0.15, Enum.EasingStyle.Sine), {
-				BackgroundTransparency = 0.9,
-				TextTransparency = 0.2,
-				TextColor3 = hoverColor or getTheme().Text
-			}):Play()
-		end)
-		btn.MouseLeave:Connect(function()
-			Tween(btn, TweenInfo.new(0.15, Enum.EasingStyle.Sine), {
-				BackgroundTransparency = 1,
-				TextTransparency = 0.5,
-				TextColor3 = getTheme().Text
-			}):Play()
-		end)
-
-		return btn
-	end
-
-	local minimize = createWindowControlBtn("Minimize", "—", 1, nil)
-	local maximize = createWindowControlBtn("Maximize", "□", 2, nil)
-	local exit = createWindowControlBtn("Exit", "✕", 3, Color3.fromRGB(255, 80, 80))
-
-	-- Drag handle (left side of topbar)
 	local moveIcon = Instance.new("ImageButton")
 	moveIcon.Name = "MoveIcon"
 	moveIcon.Image = assets.transform
 	moveIcon.ImageTransparency = 0.7
-	moveIcon.AnchorPoint = Vector2.new(0, 0.5)
+	moveIcon.AnchorPoint = Vector2.new(1, 0.5)
 	moveIcon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	moveIcon.BackgroundTransparency = 1
 	moveIcon.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	moveIcon.BorderSizePixel = 0
-	moveIcon.Position = UDim2.fromScale(0, 0.5)
+	moveIcon.Position = UDim2.fromScale(1, 0.5)
 	moveIcon.Size = UDim2.fromOffset(15, 15)
 	moveIcon.Parent = elements
 	moveIcon.Visible = not Settings.DragStyle or Settings.DragStyle == 1
@@ -5340,13 +5203,6 @@ function MacLib:Window(Settings)
 		if onUnloadCallback then
 			onUnloadCallback()  
 		end
-		-- Clean up watermark
-		if watermarkConnection then watermarkConnection:Disconnect() end
-		if watermarkGui then watermarkGui:Destroy() end
-		-- Clean up keybinds menu
-		if keybindsGui then keybindsGui:Destroy() end
-		-- Clean up session timer
-		if sessionTimerConnection then sessionTimerConnection:Disconnect() end
 		macLib:Destroy()
 		unloaded = true
 	end
@@ -5375,15 +5231,6 @@ function MacLib:Window(Settings)
 	end)
 
 	minimize.MouseButton1Click:Connect(ToggleMenu)
-	maximize.MouseButton1Click:Connect(function()
-		-- Expand/collapse: toggle between default and larger size
-		local defaultSize = Settings.Size or UDim2.fromOffset(868, 650)
-		local expandedSize = UDim2.fromOffset(1100, 750)
-		local isExpanded = base.Size == expandedSize
-		Tween(base, TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-			Size = isExpanded and defaultSize or expandedSize
-		}):Play()
-	end)
 	exit.MouseButton1Click:Connect(function()
 		WindowFunctions:Dialog({
 			Title = Settings.Title,
@@ -5457,302 +5304,6 @@ function MacLib:Window(Settings)
 	end
 	function WindowFunctions:GetScale()
 		return baseUIScale.Scale
-	end
-
-	-- Theme System API
-	function WindowFunctions:SetTheme(themeName)
-		if not MacLib.Themes[themeName] then return end
-		MacLib.CurrentTheme = themeName
-		local theme = getTheme()
-
-		-- Update base window
-		Tween(base, TweenInfo.new(0.4, Enum.EasingStyle.Sine), {
-			BackgroundColor3 = theme.Base
-		}):Play()
-
-		-- Update all registered theme bindings
-		for _, binding in ipairs(themeBindings) do
-			if binding.instance and binding.instance.Parent then
-				local targetValue = theme[binding.themeKey]
-				if targetValue then
-					if binding.extraTransparencyKey and theme[binding.extraTransparencyKey] then
-						Tween(binding.instance, TweenInfo.new(0.3, Enum.EasingStyle.Sine), {
-							[binding.property] = targetValue,
-							BackgroundTransparency = theme[binding.extraTransparencyKey]
-						}):Play()
-					else
-						Tween(binding.instance, TweenInfo.new(0.3, Enum.EasingStyle.Sine), {
-							[binding.property] = targetValue
-						}):Play()
-					end
-				end
-			end
-		end
-
-		-- Update key UI elements
-		Tween(baseUIStroke, TweenInfo.new(0.3, Enum.EasingStyle.Sine), {
-			Color = theme.Stroke,
-			Transparency = theme.StrokeTransparency
-		}):Play()
-	end
-
-	function WindowFunctions:GetTheme()
-		return MacLib.CurrentTheme
-	end
-
-	function WindowFunctions:GetThemes()
-		local names = {}
-		for name in pairs(MacLib.Themes) do
-			table.insert(names, name)
-		end
-		return names
-	end
-
-	-- Session Time API
-	function WindowFunctions:GetSessionTime()
-		return math.floor(tick() - sessionStartTick)
-	end
-
-	-- Watermark System
-	local watermarkGui, watermarkConnection
-	function WindowFunctions:Watermark(Settings)
-		local WatermarkFunctions = {}
-		Settings = Settings or {}
-
-		if watermarkGui then watermarkGui:Destroy() end
-
-		watermarkGui = Instance.new("ScreenGui")
-		watermarkGui.Name = "SynlithWatermark"
-		watermarkGui.ScreenInsets = Enum.ScreenInsets.None
-		watermarkGui.ResetOnSpawn = false
-		watermarkGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-		watermarkGui.DisplayOrder = 2147483646
-
-		local wmParent = RunService:IsStudio()
-			and LocalPlayer:FindFirstChild("PlayerGui")
-			or (gethui and gethui())
-			or (cloneref and cloneref(MacLib.GetService("CoreGui")) or MacLib.GetService("CoreGui"))
-		watermarkGui.Parent = wmParent
-
-		local wmFrame = Instance.new("Frame")
-		wmFrame.Name = "WatermarkFrame"
-		wmFrame.AnchorPoint = Vector2.new(1, 0)
-		wmFrame.Position = Settings.Position or UDim2.new(1, -15, 0, 15)
-		wmFrame.AutomaticSize = Enum.AutomaticSize.XY
-		wmFrame.BackgroundColor3 = getTheme().Base
-		wmFrame.BackgroundTransparency = 0.3
-		wmFrame.BorderSizePixel = 0
-		wmFrame.Parent = watermarkGui
-
-		local wmCorner = Instance.new("UICorner")
-		wmCorner.CornerRadius = UDim.new(0, 6)
-		wmCorner.Parent = wmFrame
-
-		local wmStroke = Instance.new("UIStroke")
-		wmStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-		wmStroke.Color = getTheme().Stroke
-		wmStroke.Transparency = getTheme().StrokeTransparency
-		wmStroke.Parent = wmFrame
-
-		local wmPadding = Instance.new("UIPadding")
-		wmPadding.PaddingTop = UDim.new(0, 6)
-		wmPadding.PaddingBottom = UDim.new(0, 6)
-		wmPadding.PaddingLeft = UDim.new(0, 12)
-		wmPadding.PaddingRight = UDim.new(0, 12)
-		wmPadding.Parent = wmFrame
-
-		local wmLabel = Instance.new("TextLabel")
-		wmLabel.Name = "WatermarkLabel"
-		wmLabel.FontFace = Font.new(assets.interFont, Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-		wmLabel.Text = "Synlith Hub | Arsenal"
-		wmLabel.TextColor3 = getTheme().Text
-		wmLabel.TextSize = 12
-		wmLabel.TextTransparency = 0.2
-		wmLabel.AutomaticSize = Enum.AutomaticSize.XY
-		wmLabel.BackgroundTransparency = 1
-		wmLabel.BorderSizePixel = 0
-		wmLabel.Parent = wmFrame
-		registerThemeBinding(wmLabel, "TextColor3", "Text")
-
-		local format = Settings.Format or "Synlith Hub | Arsenal | {fps} FPS | {ping}ms"
-		local lastFpsUpdate = 0
-		local fpsValue = 60
-
-		if watermarkConnection then watermarkConnection:Disconnect() end
-		watermarkConnection = RunService.Heartbeat:Connect(function(dt)
-			if unloaded then
-				if watermarkConnection then watermarkConnection:Disconnect() end
-				return
-			end
-			lastFpsUpdate = lastFpsUpdate + dt
-			if lastFpsUpdate >= 0.5 then
-				lastFpsUpdate = 0
-				fpsValue = math.floor(1 / dt)
-				local ping = 0
-				pcall(function()
-					ping = math.floor(game:GetService("Stats"):FindFirstChild("PerformanceStats"):FindFirstChild("Ping"):GetValue())
-				end)
-				local text = format
-				text = text:gsub("{fps}", tostring(fpsValue))
-				text = text:gsub("{ping}", tostring(ping))
-				wmLabel.Text = text
-			end
-		end)
-
-		function WatermarkFunctions:SetVisible(state)
-			watermarkGui.Enabled = state
-		end
-		function WatermarkFunctions:UpdateFormat(newFormat)
-			format = newFormat
-		end
-		function WatermarkFunctions:Destroy()
-			if watermarkConnection then watermarkConnection:Disconnect() end
-			if watermarkGui then watermarkGui:Destroy() end
-		end
-
-		return WatermarkFunctions
-	end
-
-	-- Keybinds Menu System
-	local keybindsGui, keybindsFrame
-	function WindowFunctions:KeybindsMenu(Settings)
-		local KeybindsMenuFunctions = {}
-		Settings = Settings or {}
-
-		if keybindsGui then keybindsGui:Destroy() end
-
-		keybindsGui = Instance.new("ScreenGui")
-		keybindsGui.Name = "SynlithKeybinds"
-		keybindsGui.ScreenInsets = Enum.ScreenInsets.None
-		keybindsGui.ResetOnSpawn = false
-		keybindsGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-		keybindsGui.DisplayOrder = 2147483646
-
-		local kbParent = RunService:IsStudio()
-			and LocalPlayer:FindFirstChild("PlayerGui")
-			or (gethui and gethui())
-			or (cloneref and cloneref(MacLib.GetService("CoreGui")) or MacLib.GetService("CoreGui"))
-		keybindsGui.Parent = kbParent
-
-		keybindsFrame = Instance.new("Frame")
-		keybindsFrame.Name = "KeybindsFrame"
-		keybindsFrame.AnchorPoint = Vector2.new(0, 0)
-		keybindsFrame.Position = Settings.Position or UDim2.new(0, 15, 0, 15)
-		keybindsFrame.Size = UDim2.fromOffset(220, 0)
-		keybindsFrame.AutomaticSize = Enum.AutomaticSize.Y
-		keybindsFrame.BackgroundColor3 = getTheme().Base
-		keybindsFrame.BackgroundTransparency = 0.2
-		keybindsFrame.BorderSizePixel = 0
-		keybindsFrame.Parent = keybindsGui
-
-		local kbCorner = Instance.new("UICorner")
-		kbCorner.CornerRadius = UDim.new(0, 8)
-		kbCorner.Parent = keybindsFrame
-
-		local kbStroke = Instance.new("UIStroke")
-		kbStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-		kbStroke.Color = getTheme().Stroke
-		kbStroke.Transparency = getTheme().StrokeTransparency
-		kbStroke.Parent = keybindsFrame
-
-		local kbPadding = Instance.new("UIPadding")
-		kbPadding.PaddingTop = UDim.new(0, 10)
-		kbPadding.PaddingBottom = UDim.new(0, 10)
-		kbPadding.PaddingLeft = UDim.new(0, 14)
-		kbPadding.PaddingRight = UDim.new(0, 14)
-		kbPadding.Parent = keybindsFrame
-
-		local kbLayout = Instance.new("UIListLayout")
-		kbLayout.Padding = UDim.new(0, 4)
-		kbLayout.SortOrder = Enum.SortOrder.LayoutOrder
-		kbLayout.Parent = keybindsFrame
-
-		local kbHeader = Instance.new("TextLabel")
-		kbHeader.Name = "Header"
-		kbHeader.FontFace = Font.new(assets.interFont, Enum.FontWeight.Bold, Enum.FontStyle.Normal)
-		kbHeader.Text = "Keybinds"
-		kbHeader.TextColor3 = getTheme().Text
-		kbHeader.TextSize = 14
-		kbHeader.TextTransparency = 0.1
-		kbHeader.TextXAlignment = Enum.TextXAlignment.Left
-		kbHeader.AutomaticSize = Enum.AutomaticSize.Y
-		kbHeader.BackgroundTransparency = 1
-		kbHeader.BorderSizePixel = 0
-		kbHeader.Size = UDim2.fromScale(1, 0)
-		kbHeader.Parent = keybindsFrame
-		registerThemeBinding(kbHeader, "TextColor3", "Text")
-
-		local kbDivider = Instance.new("Frame")
-		kbDivider.Name = "Divider"
-		kbDivider.BackgroundColor3 = getTheme().Stroke
-		kbDivider.BackgroundTransparency = getTheme().StrokeTransparency
-		kbDivider.BorderSizePixel = 0
-		kbDivider.Size = UDim2.new(1, 0, 0, 1)
-		kbDivider.LayoutOrder = 1
-		kbDivider.Parent = keybindsFrame
-
-		local function refreshKeybinds()
-			-- Clear old entries
-			for _, child in ipairs(keybindsFrame:GetChildren()) do
-				if child.Name == "KeybindEntry" then
-					child:Destroy()
-				end
-			end
-
-			local order = 2
-			for flag, option in pairs(MacLib.Options) do
-				if option.Class == "Keybind" and option.Bind then
-					local entry = Instance.new("Frame")
-					entry.Name = "KeybindEntry"
-					entry.BackgroundTransparency = 1
-					entry.BorderSizePixel = 0
-					entry.Size = UDim2.new(1, 0, 0, 18)
-					entry.LayoutOrder = order
-					entry.Parent = keybindsFrame
-					order = order + 1
-
-					local entryName = Instance.new("TextLabel")
-					entryName.FontFace = Font.new(assets.interFont, Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-					entryName.Text = option.Settings and option.Settings.Name or flag
-					entryName.TextColor3 = getTheme().Text
-					entryName.TextSize = 12
-					entryName.TextTransparency = 0.4
-					entryName.TextXAlignment = Enum.TextXAlignment.Left
-					entryName.BackgroundTransparency = 1
-					entryName.BorderSizePixel = 0
-					entryName.Size = UDim2.fromScale(0.65, 1)
-					entryName.Parent = entry
-
-					local entryKey = Instance.new("TextLabel")
-					entryKey.FontFace = Font.new(assets.interFont, Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
-					entryKey.Text = "[" .. tostring(typeof(option.Bind) == "EnumItem" and option.Bind.Name or "None") .. "]"
-					entryKey.TextColor3 = getTheme().Accent
-					entryKey.TextSize = 11
-					entryKey.TextTransparency = 0.3
-					entryKey.TextXAlignment = Enum.TextXAlignment.Right
-					entryKey.AnchorPoint = Vector2.new(1, 0)
-					entryKey.Position = UDim2.fromScale(1, 0)
-					entryKey.BackgroundTransparency = 1
-					entryKey.BorderSizePixel = 0
-					entryKey.Size = UDim2.fromScale(0.35, 1)
-					entryKey.Parent = entry
-				end
-			end
-		end
-
-		refreshKeybinds()
-
-		function KeybindsMenuFunctions:SetVisible(state)
-			keybindsGui.Enabled = state
-		end
-		function KeybindsMenuFunctions:Refresh()
-			refreshKeybinds()
-		end
-		function KeybindsMenuFunctions:Destroy()
-			if keybindsGui then keybindsGui:Destroy() end
-		end
-
-		return KeybindsMenuFunctions
 	end
 
 	local ClassParser = {
@@ -5996,6 +5547,43 @@ function MacLib:Window(Settings)
 	windowState = true
 
 	return WindowFunctions
+end
+
+function MacLib:ToggleSnow(enabled)
+	local macLib = game:GetService("CoreGui"):FindFirstChild("Maclib")
+	if not macLib then return end
+	if not enabled then
+		if macLib:FindFirstChild("SnowContainer") then macLib.SnowContainer:Destroy() end
+		return
+	end
+	if macLib:FindFirstChild("SnowContainer") then return end
+	local snowContainer = Instance.new("Frame")
+	snowContainer.Name = "SnowContainer"
+	snowContainer.Size = UDim2.fromScale(1, 1)
+	snowContainer.BackgroundTransparency = 1
+	snowContainer.Parent = macLib
+	
+	task.spawn(function()
+		while snowContainer.Parent do
+			local flake = Instance.new("Frame")
+			flake.Size = UDim2.fromOffset(math.random(2,5), math.random(2,5))
+			flake.Position = UDim2.new(math.random(), 0, -0.1, 0)
+			flake.BackgroundColor3 = Color3.fromRGB(255,255,255)
+			flake.BackgroundTransparency = math.random(2, 8) / 10
+			local corner = Instance.new("UICorner")
+			corner.CornerRadius = UDim.new(1,0)
+			corner.Parent = flake
+			flake.Parent = snowContainer
+			
+			local ts = game:GetService("TweenService")
+			ts:Create(flake, TweenInfo.new(math.random(5,10), Enum.EasingStyle.Linear), {
+				Position = UDim2.new(math.random(), 0, 1.1, 0)
+			}):Play()
+			
+			game:GetService("Debris"):AddItem(flake, 10)
+			task.wait(math.random(1, 3) / 10)
+		end
+	end)
 end
 
 function MacLib:Demo()
