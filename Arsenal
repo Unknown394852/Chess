@@ -36,7 +36,7 @@ end
 local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Unknown394852/Chess/refs/heads/main/Maclibcustom"))()
 
 --// Load Icons
-local Icons = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/Icons/main/dist/main.lua"))()
+local IconsV2 = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"))()
 
 --// Feature States
 local Settings = {
